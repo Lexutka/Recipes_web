@@ -1,0 +1,25 @@
+{% extends "home.html" %}
+{% block content %}
+<div id="root">
+    <div class="form">
+        <form method="POST" enctype="multipart/form-data">
+            <input id="message_text" class="form__input" type="text"
+               name="name" placeholder="Введите имя"/>
+            <input id="message_text" class="form__input" type="password" min="6"
+               name="password" placeholder="Введите пароль"/>
+            <button class="form__button" type="submit">сохранить</button>
+            {% if msg %}
+            <p class="uk-text-danger">{{ msg.error_msg }}</p>
+
+            {% endif %}
+        </form>
+    </div>
+    <div id="messages">
+
+    </div>
+</div>
+{% endblock %}
+ 
+{% block bottom_js %}
+ 
+{% endblock %}

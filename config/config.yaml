@@ -1,0 +1,5 @@
+common:
+  port: 8080
+postgres:
+  database_url: postgres+psycopg2://igkyezeo:nrzV9tYWcAMR2mHBPEfGWBP5li0osjsL@abul.db.elephantsql.com/igkyezeo
+  require_ssl: false
