@@ -1,8 +1,8 @@
-from app.recipes.views import Home, Register, Login
+from app.recipes.views import Home, Register, Login, NewRecipe
 
 
 def setup_routes(app):
-   app.router.add_view("/", Home, name='Home')
-   app.router.add_view("/register", Register, name='Register')
-   app.router.add_view("/login", Login, name='Login')
-   #app.router.add_get("/new_recipe", )
+   app.router.add_view("/", Home, name='home')
+   app.router.add_view("/register", Register, name='register')
+   app.router.add_view("/login", Login, name='login')
+   app.router.add_view("/new_recipe", NewRecipe, name='new-recipe')

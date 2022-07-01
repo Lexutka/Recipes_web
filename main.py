@@ -1,37 +1,43 @@
+import pathlib
 import aiohttp_jinja2
 import jinja2
+import aiohttp_session
+from aiohttp_session import get_session
 from aiohttp import web
+import aiohttp_debugtoolbar
+from aiohttp_debugtoolbar import toolbar_middleware_factory
+from app.recipes.routes import setup_routes
 
-from app.settings import config, BASE_DIR
 
-
-def setup_config(application):
-   application["config"] = config
+BASE_DIR = pathlib.Path(__file__).parent
 
 
 def setup_external_libraries(application):
    aiohttp_jinja2.setup(
-      application,
-      loader=jinja2.FileSystemLoader(f"{BASE_DIR}/templates"),
-   )
+                        application,
+                        loader=jinja2.FileSystemLoader(f"{BASE_DIR}/templates"),
+                        )
 
 
-# настроим url-пути для доступа к нашему будущему приложению
-def setup_routes(application):
-   from app.recipes.routes import setup_routes as setup_recipe_routes
-   setup_recipe_routes(application)
+@web.middleware
+async def middleware(request, handler):
+    session = await get_session(request)
+    session.new == True
+    resp = await handler(request)
+    print('произошел запрос')
+    return resp
 
 
 def setup_app(application):
-   setup_config(application)
-   setup_external_libraries(application)
-   setup_routes(application)
+    setup_external_libraries(application)
+    setup_routes(application)
 
 
-app = web.Application()
+app = web.Application(middlewares=[toolbar_middleware_factory])
 
 
 if __name__ == "__main__":
-   setup_app(app)
-   web.run_app(app, port=config["common"]["port"])
-
+    aiohttp_session.setup(app, aiohttp_session.SimpleCookieStorage())  # для production-версии заменить (НЕБЕЗОПАСНО!)
+    setup_app(app)
+    aiohttp_debugtoolbar.setup(app)
+    web.run_app(app, port=8080, host="127.0.0.1")

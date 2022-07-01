@@ -1,18 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Новый рецепт</h1>
-<form method="POST" enctype="multipart/form-data">
-    <p>{{ form.title }}</p>
-    <p>{{ form.text }}</p>
-    <p>Фотография (опционально)</p>
-    {{ form.photo }}
-    <span>{{ error }}</span>
-    <br><button type="submit">Отправить</button>
-</form>
-</body>
-</html>
+{% extends 'home.html' %}
+{% block content %}
+<div id="root">
+    <div class="form">
+        <form method="POST" enctype="multipart/form-data">
+            <input class="form__input" type="text" min="5"
+               name="title" value="{{ title }}" placeholder="Название блюда"/>
+            {% for type in types %}
+            <p><input class="form__input" type="radio"
+               name="type" value="{{ type }}"/>{{ type }}</p>
+            {% endfor %}
+            <input class="form__input" type="text"
+               name="description" placeholder="Краткое описание блюда"/>
+            <input class="form__input" type="text"
+               name="cooking_steps" placeholder="Шаги приготовления"/>
+            <input class="form__input" type="text"
+               name="photo" placeholder="Ссылка на фотографию блюда"/>
+            <input class="form__input" type="text"
+               name="tags" placeholder="Теги (через запятую)"/>
+            <button class="form__button" type="submit">Добавить рецепт</button>
+            {% if msg %}
+            <p class="uk-text-danger">{{ msg.error_msg }}</p>
+
+            {% endif %}
+        </form>
+    </div>
+    <div id="messages">
+
+    </div>
+</div>
+{% endblock %}
