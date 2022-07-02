@@ -13,10 +13,10 @@ BASE_DIR = pathlib.Path(__file__).parent
 
 
 def setup_external_libraries(application):
-   aiohttp_jinja2.setup(
-                        application,
-                        loader=jinja2.FileSystemLoader(f"{BASE_DIR}/templates"),
-                        )
+    aiohttp_jinja2.setup(
+        application,
+        loader=jinja2.FileSystemLoader(f"{BASE_DIR}/templates"),
+        )
 
 
 @web.middleware
@@ -37,7 +37,7 @@ app = web.Application(middlewares=[toolbar_middleware_factory])
 
 
 if __name__ == "__main__":
-    aiohttp_session.setup(app, aiohttp_session.SimpleCookieStorage())  # для production-версии заменить (НЕБЕЗОПАСНО!)
+    aiohttp_session.setup(app, aiohttp_session.SimpleCookieStorage())  # в production заменить (НЕБЕЗОПАСНО!!!)
     setup_app(app)
     aiohttp_debugtoolbar.setup(app)
     web.run_app(app, port=8080, host="127.0.0.1")
