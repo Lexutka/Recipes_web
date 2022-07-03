@@ -1,4 +1,7 @@
-{% extends 'home.html' %}
+{% extends 'templatepage.html' %}
+{% block title %}
+Новый рецепт
+{% endblock %}
 {% block content %}
 <div id="root">
     <div class="form">
@@ -18,7 +21,7 @@
             <input class="form__input" type="text"
                name="photo" placeholder="Ссылка на фотографию блюда"/>
             <input class="form__input" type="text"
-               name="tags" placeholder="Теги (через запятую)"/>
+               name="tags" placeholder="Теги (через пробел)"/>
             <button class="form__button" type="submit">Добавить рецепт</button>
             {% if msg %}
             <p class="uk-text-danger">{{ msg.error_msg }}</p>

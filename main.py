@@ -7,6 +7,7 @@ from aiohttp import web
 import aiohttp_debugtoolbar
 from aiohttp_debugtoolbar import toolbar_middleware_factory
 from app.recipes.routes import setup_routes
+import asyncio
 
 
 BASE_DIR = pathlib.Path(__file__).parent
@@ -31,7 +32,6 @@ async def middleware(request, handler):
 def setup_app(application):
     setup_external_libraries(application)
     setup_routes(application)
-
 
 app = web.Application(middlewares=[toolbar_middleware_factory])
 

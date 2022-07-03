@@ -1,0 +1,12 @@
+{% extends "templatepage.html" %}
+{% block title %}
+{{ owner_profile.name }}
+{% endblock %}
+{% block content %}
+<h2>Профиль пользователя {{ owner_profile.name }}</h2>
+<p>ID: {{ owner_profile.id }}</p>
+<p>Кол-во рецептов {{ recipes_amount }}</p>
+{% if owner_profile.status %}
+<p>Статус: заблокирован</p>
+{% endif %}
+{% endblock %}

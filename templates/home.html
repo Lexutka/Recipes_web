@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{title}}</title>
-</head>
-<body>
-<header>
-    <p>Рецепты для всех</p>
-
-    <nav>
-        <a href="{{ url('home') }}">На главную</a>
-        {% if not session %}
-        <a href="{{ url('register') }}">Зарегистрироваться</a>
-        <a href="{{ url('login') }}">Войти</a>
-        {% endif %}
-        {% if session %}
-        <a href="{{ url('cabinet') }}">Личный кабинет</a>
-        <a href="{{ url('new-recipe') }}">Новый рецепт</a>
-        {% endif %}
-    </nav>
-</header>
+{% extends "templatepage.html" %}
+{% block title %}
+Домашняя страница
+{% endblock %}
 {% block content %}
-<h4> Добро пожаловать, {{ current_user }}</h4>
+<h2> Добро пожаловать, {{ current_user }}</h2>
 {% for recipe in recipes %}
-<p>{{ recipe.title }}</p>
-<p>{{ recipe.author }}</p>
+<h3><a href="recipe/?id={{ recipe.id }}">{{ recipe.title }}</a></h3>
+<h4>автор: <a href="profile/?name={{ recipe.author }}">{{ recipe.author }}</a> | добавлен {{ recipe.creation_date }} (обновлен {{ recipe.updated_on }})</h4>
+<p>{{ recipe.type }}</p>
+<p>{{ recipe.photo }}</p>
+<p>{{ recipe.description }}</p>
+<p>{{ recipe.tags }}</p>
 {% endfor%}
 {% endblock %}
-</body>
-</html>
