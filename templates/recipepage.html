@@ -1,0 +1,14 @@
+{% extends "templatepage.html" %}
+{% block title %}
+{{ recipe.title }}
+{% endblock %}
+{% block content %}
+<h2>{{ recipe.title }}</h2>
+<h4>автор: <a href="profile/?name={{ recipe.author }}">{{ recipe.author }}</a> | добавлен {{ recipe.creation_date }} (обновлен {{ recipe.updated_on }})</h4>
+<p>{{ recipe.type }}</p>
+<p>{{ recipe.photo }}</p>
+<p>Описание: {{ recipe.description }}</p>
+<p>Шаги приготовления</p>
+<p>{{ recipe.cooling_steps }}</p>
+<p>{{ recipe.tags }}</p>
+{% endblock %}
