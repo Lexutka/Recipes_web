@@ -122,13 +122,10 @@ class Home(web.View):
         if recipes_amount == 0:
             status = 400
         types = ["салат", "первое", "второе", "десерт", "напиток", "выпечка"]
-        context = {'session': session,
-                   'current_user': current_user,
-                   'req_filt': req_filt,
-                   'prev': prev,
-                   'next': next,
-                   'results': results,
-                   'types': types}
+        context = {
+            'session': session, 'current_user': current_user, 'req_filt': req_filt,
+            'prev': prev, 'next': next, 'results': results, 'types': types
+            }
         return render('home.html', self.request, context=context, status=status)
 
 
@@ -213,10 +210,7 @@ class Profile(web.View):
         owner_name = self.request.rel_url.query['name']
         owner_profile = db.get_object(model=User, where=User.name, equal_to=owner_name).scalar()
         recipes_amount = db.get_object(model=Recipe, where=Recipe.author, equal_to=owner_name).count()
-        context = {'session': session,
-                   'admin': admin,
-                   'owner_profile': owner_profile,
-                   'recipes_amount': recipes_amount}
+        context = {'session': session, 'admin': admin, 'owner_profile': owner_profile, 'recipes_amount': recipes_amount}
         try:
             test = owner_profile.id
         except AttributeError:
@@ -243,21 +237,17 @@ class NewRecipe(web.View):
         session = await get_session(self.request)
         author = db.get_object(model=User.name, where=User.id, equal_to=session['id']).scalar()
         types = ['салат', 'первое', 'второе', 'десерт', 'напиток', 'выпечка']
-        context = {'session': session,
-                   'author': author,
-                   'types': types}
+        context = {'session': session, 'author': author,'types': types}
         return render('new_recipe.html', self.request, context=context)
 
     @ban_check
     async def post(self):
         data = await self.request.post()
-        db.new_recipe(author=data['author'],
-                      title=data['title'],
-                      r_type=data['type'],
-                      description=data['description'],
-                      cooking_steps=data['cooking_steps'],
-                      photo=data['photo'],
-                      tags=data['tags'])
+        db.new_recipe(
+            author=data['author'], title=data['title'], r_type=data['type'],
+            description=data['description'], cooking_steps=data['cooking_steps'],
+            photo=data['photo'], tags=data['tags']
+            )
         return web.Response(status=302, headers={'location': '/'})
 
 
