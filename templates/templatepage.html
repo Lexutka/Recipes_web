@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<header>
+    <h1>Рецепты для всех</h1>
+    <nav>
+        <a href="{{ url('home') }}">На главную</a>
+        <a href="{{ url('top-users') }}">Топ 10 пользователей</a>
+        {% if not session %}
+        <a href="{{ url('register') }}">Зарегистрироваться</a>
+        <a href="{{ url('login') }}">Войти</a>
+        {% endif %}
+        {% if session %}
+        <a href="{{ url('cabinet') }}">Личный кабинет</a>
+        <a href="{{ url('new-recipe') }}">Новый рецепт</a>
+        {% endif %}
+    </nav>
+</header>
+{% block content %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends 'templatepage.html' %}
+{% block title %}
+Регистрация
+{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" min="5"
+       name="name" placeholder="Введите имя"/><br>
+    <input type="password" min="6"
+       name="password" placeholder="Введите пароль"/>
+    <button type="submit">сохранить</button>
+    {% if msg %}
+    <p>{{ msg }}</p>
+    {% endif %}
+</form>
+{% endblock %}

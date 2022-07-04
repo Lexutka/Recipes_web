@@ -1,0 +1,17 @@
+{% extends "templatepage.html" %}
+{% block title %}
+Администрирование
+{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="text"
+       name="token" placeholder="Введите ключ"/><br>
+    <button type="submit">сохранить</button>
+    {% if msg %}
+    <p>{{ msg }}</p>
+    {% endif %}
+</form>
+{% if admin %}
+<a href="{{ url ('logout') }}">Выйти из сессии администратора</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "templatepage.html" %}
+{% block title %}
+{{ recipe.title }}
+{% endblock %}
+{% block content %}
+<h2>{{ recipe.title }}</h2>
+<h4>автор: <a href="/profile/?name={{ recipe.author }}">{{ recipe.author }}</a> | добавлен {{ recipe.creation_date }} (обновлен {{ recipe.updated_on }})</h4>
+<p>Тип блюда: {{ recipe.r_type }}</p>
+<p>Ссылка на фото с блюдом:{{ recipe.photo }}</p>
+<p>Описание: {{ recipe.description }}</p>
+<p>Шаги приготовления</p>
+<p>{{ recipe.cooking_steps }}</p>
+<p>{{ recipe.tags }}</p>
+{% if admin %}
+    <form method="post" enctype="multipart/form-data">
+        <button type="submit">Заблокировать/Разблокировать рецепт</button>
+    </form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "templatepage.html" %}
+{% block title %}
+Личный кабинет
+{% endblock %}
+{% block content %}
+<p>Добро пожаловать в личный кабинет, {{ user.name }}!</p>
+<p>Ваш ID: {{ user.id }}</p>
+<p>Вы добавили рецептов: {{ recipes_amount }}</p>
+{% if user.blocked_status %}
+<p>Ваш профиль был заблокирован. Доступ к сайту ограничен.</p>
+{% endif %}
+<form method="post">
+    <button type="submit">Выйти</button>
+</form>
+{% endblock %}

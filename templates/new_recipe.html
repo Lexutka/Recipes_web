@@ -1,0 +1,25 @@
+{% extends 'templatepage.html' %}
+{% block title %}
+Новый рецепт
+{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <p>Автор: {{ author }}</p>
+    <input type="hidden" name="author" value="{{ author }}"/>
+    <input type="text" min="5"
+       name="title" value="{{ title }}" placeholder="Название блюда"/>
+    {% for type in types %}
+    <p><input type="radio"
+       name="type" value="{{ type }}"/>{{ type }}</p>
+    {% endfor %}
+    <input type="text" maxlength="500"
+       name="description" placeholder="Краткое описание блюда"/>
+    <input type="text"
+       name="cooking_steps" placeholder="Шаги приготовления"/>
+    <input type="text"
+       name="photo" placeholder="Ссылка на фотографию блюда"/>
+    <input type="text"
+       name="tags" placeholder="Теги (через запятую)"/>
+    <button type="submit">Добавить рецепт</button>
+</form>
+{% endblock %}

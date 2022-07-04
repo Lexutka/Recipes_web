@@ -1,0 +1,15 @@
+{% extends "templatepage.html" %}
+{% block title %}
+ТОП 10 пользователей
+{% endblock %}
+{% block content %}
+<h2>Топ 10 пользователей</h2>
+{% for top in tops %}
+<h2>{{ top.User.name }}</h2>
+<p>ID: {{ top.User.id }}</p>
+<p>Кол-во рецептов {{ top.recipes }}</p>
+{% if top.User.status %}
+<p>Статус: заблокирован</p>
+{% endif %}
+{% endfor %}
+{% endblock %}
