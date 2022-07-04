@@ -1,9 +1,10 @@
 import datetime
+from typing import Optional, Union, Any
 import bcrypt
 from sqlalchemy import Column, Integer, String, Text, Boolean, Date, ForeignKey, Identity, UniqueConstraint
 from sqlalchemy import create_engine, types, func, desc, or_
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, Query
 
 from settings import db_url
 
@@ -15,29 +16,36 @@ class DbConnection:
         self.engine = create_engine(db_url)
         self.session = sessionmaker(self.engine, expire_on_commit=False)()
 
-    def new_user(self, name, password):
+    def new_user(self, name: str, password: str) -> None:
         """Сохранение нового пользователя"""
         encrypted_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         encrypted_pw = encrypted_pw.decode('utf8')
         user = User(name=name, password=encrypted_pw)
         self.session.add(user)
         self.session.commit()
-        return user
 
-    def new_recipe(self, author, title, r_type, description, cooking_steps, photo, tags):
+    def new_recipe(
+            self, author: str, title: str, r_type: str, description: str,
+            cooking_steps: str, photo: str, tags: str
+            ) -> None:
         """Сохранение нового рецепта"""
-        recipe = Recipe(author=author,
-                        title=title,
-                        r_type=r_type,
-                        description=description,
-                        cooking_steps=cooking_steps,
-                        photo=photo,
-                        tags=tags)
+        recipe = Recipe(
+            author=author,
+            title=title,
+            r_type=r_type,
+            description=description,
+            cooking_steps=cooking_steps,
+            photo=photo,
+            tags=tags
+            )
         self.session.add(recipe)
         self.session.commit()
-        return recipe
 
-    def get_object(self, model, where=None, equal_to=None, not_equal_to=None):
+    def get_object(
+            self, model: Union['User', 'Recipe'],
+            where: Union['User', 'Recipe', None] = None,
+            equal_to: Any = None, not_equal_to: Any = None
+            ) -> 'Query':
         """Получение Query-объекта(-ов) по запросу с простой фильтрацией"""
         with self.session as session:
             if not where:
@@ -47,7 +55,7 @@ class DbConnection:
             elif not_equal_to is not None:
                 return session.query(model).where(where != not_equal_to)
 
-    def get_top_users(self):
+    def get_top_users(self) -> 'Query':
         """Получение топа 10-ти пользователей по кол-ву
          рецептов с подсчетом кол-ва рецептов у каждого
 
@@ -60,35 +68,50 @@ class DbConnection:
             top = main_query.where(subquery.c.recipes > 0).limit(10)
             return top
 
-    def if_exists(self, model, where=None, equal_to=None, not_equal_to=None):
+    def if_exists(
+            self, model: Union['User', 'Recipe'],
+            where: Union['User', 'Recipe', None] = None,
+            equal_to: Any = None, not_equal_to: Any = None
+            ) -> bool:
         """Проверка существования строки в БД."""
         with self.session as session:
             query = self.get_object(model, where, equal_to, not_equal_to)
             result = session.query(query.exists())
             return result.scalar()
 
-    def update_recipe(self, to_update: dict, where=None, equal_to=None, not_equal_to=None):
+    def update_recipe(
+            self, to_update: dict, where: Optional['Recipe'] = None,
+            equal_to: Any = None, not_equal_to: Any = None
+            ) -> None:
         """Обновление данных существующих рецептов с фильтрацией."""
         with self.session as session:
             query = self.get_object(Recipe, where, equal_to, not_equal_to)
             query.update(to_update, synchronize_session=False)
             session.commit()
 
-    def update_user(self, to_update: dict, where=None, equal_to=None, not_equal_to=None):
+    def update_user(
+            self, to_update: dict, where: Optional['User'] = None,
+            equal_to: Any = None, not_equal_to: Any = None
+            ) -> None:
         """Обновление данных существующих пользователей с фильтрацией."""
         with self.session as session:
             query = self.get_object(User, where, equal_to, not_equal_to)
             query.update(to_update, synchronize_session=False)
             session.commit()
 
-    def filtered_recipe_search(self, search=None, r_type=None, with_photo=None, sort_by=None):
+    def filtered_recipe_search(
+            self, search: Optional[str] = None, r_type: Optional[str] = None,
+            with_photo: Optional[str] = None, sort_by: Optional[str] = None
+            ) -> 'Query':
         """Получение Query-объекта(-ов), соответствующих заданным параметрам поиска."""
         with self.session as session:
             q = session.query(Recipe).where(Recipe.blocked == False)
             if search:
-                q = q.filter(or_(func.lower(Recipe.author).like(f'%{search}%'.lower()),
-                                 func.lower(Recipe.title).like(f'%{search}%'.lower()),
-                                 func.lower(Recipe.tags).like(f'%{search}%'.lower())))
+                q = q.filter(or_(
+                    func.lower(Recipe.author).like(f'%{search}%'.lower()),
+                    func.lower(Recipe.title).like(f'%{search}%'.lower()),
+                    func.lower(Recipe.tags).like(f'%{search}%'.lower())
+                    ))
             if with_photo:
                 q = q.where(Recipe.photo != '')
             if r_type:
@@ -106,7 +129,7 @@ dbconnection = DbConnection()
 base = declarative_base()
 
 
-def db_init():
+def db_init() -> None:
     """Создание таблиц и полей при запуске сервера."""
     base.metadata.create_all(dbconnection.engine)
 
@@ -154,9 +177,10 @@ class Recipe(base):
     creation_date = Column(Date, default=datetime.date.today())
     updated_on = Column(Date, default=datetime.date.today(), onupdate=datetime.date.today())
     title = Column(String, nullable=False)
-    r_type = Column(
-        ChoiceType({'салат': 'салат', 'первое': 'первое', 'второе': 'второе', 'десерт': 'десерт', 'напиток': 'напиток',
-                    'выпечка': 'выпечка'}))
+    r_type = Column(ChoiceType({
+        'салат': 'салат', 'первое': 'первое', 'второе': 'второе',
+        'десерт': 'десерт', 'напиток': 'напиток', 'выпечка': 'выпечка'
+        }))
     description = Column(String, default='без описания')
     cooking_steps = Column(Text, nullable=False)
     photo = Column(String)
