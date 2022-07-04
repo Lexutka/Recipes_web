@@ -3,21 +3,14 @@
 Регистрация
 {% endblock %}
 {% block content %}
-<div id="root">
-    <div class="form">
-        <form method="POST" enctype="multipart/form-data">
-            <input class="form__input" type="text" min="5"
-               name="name" placeholder="Введите имя"/><br>
-            <input class="form__input" type="password" min="6"
-               name="password" placeholder="Введите пароль"/>
-            <button class="form__button" type="submit">сохранить</button>
-            {% if msg %}
-            <p class="uk-text-danger">{{ msg.error }}</p>
-            {% endif %}
-        </form>
-    </div>
-    <div id="messages">
-
-    </div>
-</div>
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" min="5"
+       name="name" placeholder="Введите имя"/><br>
+    <input type="password" min="6"
+       name="password" placeholder="Введите пароль"/>
+    <button type="submit">сохранить</button>
+    {% if msg %}
+    <p>{{ msg }}</p>
+    {% endif %}
+</form>
 {% endblock %}

@@ -1,7 +1,9 @@
 aiohttp~=3.8.1
 aiohttp-jinja2
+aiohttp_session~=2.11.0
+aiohttp_debugtoolbar~=0.6.0
 Jinja2~=3.1.2
-alembic~=1.8.0
 SQLAlchemy~=1.4.39
 bcrypt~=3.2.2
 psycopg2~=2.9.3
+PyYAML~=6.0

@@ -3,13 +3,33 @@
 Домашняя страница
 {% endblock %}
 {% block content %}
-<h2> Добро пожаловать, {{ current_user }}</h2>
-{% for recipe in recipes %}
+<h3> Добро пожаловать, {{ current_user }}</h3>
+<form method="get">
+    <input size="100px" name=search type="text" placeholder="Поиск рецепта по названию, автору, тегу, типу блюда"/>
+    <input name="with_photo" type="checkbox">Только с фото</input>
+    <button type="submit">найти</button>
+    <p>Сортировать по типу блюда</p>
+    {% for type in types %}
+        <input type="radio" name="type_filter" value="{{ type }}">{{ type }}</input>
+    {% endfor %}
+    <p>Сортировать по:</p>
+    <input type="radio" name="sort_by" value="by_date">по дате</input>
+    <input type="radio" name="sort_by" value="by_title">по названию</input>
+</form>
+{% for recipe in results %}
 <h3><a href="recipe/?id={{ recipe.id }}">{{ recipe.title }}</a></h3>
 <h4>автор: <a href="profile/?name={{ recipe.author }}">{{ recipe.author }}</a> | добавлен {{ recipe.creation_date }} (обновлен {{ recipe.updated_on }})</h4>
-<p>{{ recipe.type }}</p>
-<p>{{ recipe.photo }}</p>
+<p>Тип: {{ recipe.r_type }}</p>
+{% if recipe.photo %}
+<p>Фото: {{ recipe.photo }}</p>
+{% endif %}
 <p>{{ recipe.description }}</p>
 <p>{{ recipe.tags }}</p>
 {% endfor%}
+{% if prev %}
+<p><a href="?page={{ prev }}&search={{ req_filt.search }}&type_filter={{ req_filt.type_filter }}&with_photo={{ req_filt.with_photo }}&sort_by={{ req_filt.sort_by }}">Предыдущая страница</a></p>
+{% endif %}
+{% if next %}
+<p><a href="?page={{ next }}&search={{ req_filt.search }}&type_filter={{ req_filt.type_filter }}&with_photo={{ req_filt.with_photo }}&sort_by={{ req_filt.sort_by }}">Следующая страница</a></p>
+{% endif %}
 {% endblock %}

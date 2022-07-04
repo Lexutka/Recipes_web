@@ -4,11 +4,11 @@
 {% endblock %}
 {% block content %}
 <h2>Топ 10 пользователей</h2>
-{% for user in users %}
-<h2>Профиль пользователя {{ users.name }}</h2>
-<p>ID: {{ user.id }}</p>
-<p>Кол-во рецептов {{ user.recipes }}</p>
-{% if user.status %}
+{% for top in tops %}
+<h2>{{ top.User.name }}</h2>
+<p>ID: {{ top.User.id }}</p>
+<p>Кол-во рецептов {{ top.recipes }}</p>
+{% if top.User.status %}
 <p>Статус: заблокирован</p>
 {% endif %}
 {% endfor %}
