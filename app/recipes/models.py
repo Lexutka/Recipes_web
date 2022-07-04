@@ -38,7 +38,7 @@ class DbConnection:
         return recipe
 
     def get_object(self, model, where=None, equal_to=None, not_equal_to=None):
-        """Получение Query-объекта(-ов) по запросу с простой фильтрацией"""
+        """Получение Query-объекта(-ов) по запросу с простой фильтрацией."""
         with self.session as session:
             if not where:
                 return session.query(model)
@@ -49,7 +49,7 @@ class DbConnection:
 
     def get_top_users(self):
         """Получение топа 10-ти пользователей по кол-ву
-         рецептов с подсчетом кол-ва рецептов у каждого
+         рецептов с подсчетом кол-ва рецептов у каждого.
 
         """
         with self.session as session:
